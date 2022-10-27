@@ -15,15 +15,20 @@ Including another URLconf
 """
 from django.urls import include, path
 from rest_framework import routers
-from melophobia.artists import views
 
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
+router = routers.SimpleRouter()
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(router.urls)),
-    path('artists/', include('rest_framework.urls', namespace='rest_framework'))
+    path('artists-app/', include('melophobia.artists.urls')),
+    path('countries-app/', include('melophobia.countries.urls')),
+    path('genres-app/', include('melophobia.genres.urls')),
+    path('labels-app/', include('melophobia.labels.urls')),
+    path('languages-app/', include('melophobia.languages.urls')),
+    path('media-app/', include('melophobia.media.urls')),
+    path('producers-app/', include('melophobia.producers.urls')),
+    path('releases-app/', include('melophobia.releases.urls')),
+    path('statuses-app/', include('melophobia.statuses.urls')),
+    path('tracks-app/', include('melophobia.tracks.urls')),
 ]

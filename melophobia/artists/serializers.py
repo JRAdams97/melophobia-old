@@ -1,14 +1,16 @@
-from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from melophobia.models import Artist, ArtistType
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class ArtistSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'groups']
+        model = Artist
+        fields = ['name', 'formation_date', 'formation_area', 'formation_country', 'disband_date',
+                  'disband_area', 'disband_country', 'favourite', 'artist_type', 'isni', 'amazon_music_id',
+                  'wikidata_id']
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class ArtistTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Group
-        fields = ['url', 'name']
+        model = ArtistType
+        fields = ['name']

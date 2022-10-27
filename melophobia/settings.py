@@ -38,7 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'artists',
+    'melophobia.artists',
+    'melophobia.countries',
+    'melophobia.genres',
+    'melophobia.labels',
+    'melophobia.languages',
+    'melophobia.media',
+    'melophobia.producers',
+    'melophobia.releases',
+    'melophobia.statuses',
+    'melophobia.tracks'
 ]
 
 MIDDLEWARE = [
@@ -77,8 +86,15 @@ WSGI_APPLICATION = 'melophobia.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'OPTIONS': {
+            'options': '-c search_path=melophobia'
+        },
+        'NAME': 'melophobia',
+        'USER': 'postgres',
+        'PASSWORD': '5vcrpz64',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

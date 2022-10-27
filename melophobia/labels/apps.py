@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ArtistsConfig(AppConfig):
+class LabelsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'melophobia.artists'
+    name = 'melophobia.labels'

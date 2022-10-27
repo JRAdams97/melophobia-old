@@ -1,0 +1,1638 @@
+openapi: 3.0.3
+info:
+  title: Melophobia
+  description: A personal music database server
+  contact:
+    name: Author
+    email: "justinadams7991@gmail.com"
+  license:
+    name: MIT
+    url: https://www.mit.edu/~amini/LICENSE.md
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/v1
+
+paths:
+  /artist:
+    post:
+      tags:
+        - artist
+      operationId: createArtist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artist'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - artist
+      operationId: updateArtist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Artist'
+      responses:
+        '200':
+          description: OK
+  /artist/{id}:
+    get:
+      tags:
+        - artist
+      operationId: findArtist
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Artist'
+    delete:
+      tags:
+        - artist
+      operationId: deleteArtist
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /artists:
+    get:
+      tags:
+        - artist
+      operationId: findArtists
+      parameters:
+        - in: query
+          name: genre
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: year
+          schema:
+            type: string
+            pattern: '^\d{4}$'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Artist'
+  /artist-type:
+    post:
+      tags:
+        - artist
+      operationId: createArtistType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistType'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - artist
+      operationId: updateArtistType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistType'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - artist
+      operationId: findArtistTypes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArtistType"
+  /artist-type/{id}:
+    delete:
+      tags:
+        - artist
+      operationId: deleteArtistType
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /country:
+    post:
+      tags:
+        - country
+      operationId: createCountry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Country'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - country
+      operationId: updateCountry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Country'
+      responses:
+        '200':
+          description: OK
+  /country/{id}:
+    get:
+      tags:
+        - country
+      operationId: findCountry
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Country"
+    delete:
+      tags:
+        - country
+      operationId: deleteCountry
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /countries:
+    get:
+      tags:
+        - country
+      operationId: findCountries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+  /genre:
+    post:
+      tags:
+        - genre
+      operationId: createGenre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genre'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - genre
+      operationId: updateGenre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genre'
+      responses:
+        '200':
+          description: OK
+  /genre/{id}:
+    get:
+      tags:
+        - genre
+      operationId: findGenre
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+    delete:
+      tags:
+        - genre
+      operationId: deleteGenre
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /genres:
+    get:
+      tags:
+        - genre
+      operationId: findGenres
+      parameters:
+        - in: query
+          name: parent
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+  /label:
+    post:
+      tags:
+        - label
+      operationId: createLabel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Label'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - label
+      operationId: updateLabel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Label'
+      responses:
+        '200':
+          description: OK
+  /label/{id}:
+    get:
+      tags:
+        - label
+      operationId: findLabel
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+    delete:
+      tags:
+        - label
+      operationId: deleteLabel
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /label/{id}/catalogue:
+    post:
+      tags:
+        - label
+      operationId: createCatalogueItem
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatalogueItem'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - label
+      operationId: updateCatalogueItem
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatalogueItem'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - label
+      operationId: findCatalogueItems
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CatalogueItem'
+  /label/{id}/catalogue/{globalId}:
+    get:
+      tags:
+        - label
+      operationId: findCatalogueItem
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: path
+          name: globalId
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogueItem'
+    delete:
+      tags:
+        - label
+      operationId: deleteCatalogueItem
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: path
+          name: globalId
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /labels:
+    get:
+      tags:
+        - label
+      operationId: findLabels
+      parameters:
+        - in: query
+          name: country
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: labelCode
+          schema:
+            type: string
+            pattern: '^LC[\d]{5}$'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+  /language:
+    post:
+      tags:
+        - language
+      operationId: createLanguage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Language'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - language
+      operationId: updateLanguage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Language'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - language
+      operationId: findLanguages
+      parameters:
+        - in: query
+          name: charset
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Language'
+  /language/{id}:
+    delete:
+      tags:
+        - language
+      operationId: deleteLanguage
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /media:
+    post:
+      tags:
+        - media
+      operationId: createMedia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Media'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - media
+      operationId: updateMedia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Media'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - media
+      operationId: getMediaList
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Media'
+  /media/{id}:
+    delete:
+      tags:
+        - media
+      operationId: deleteMedia
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /producer:
+    post:
+      tags:
+        - producer
+      operationId: createProducer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Producer'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - producer
+      operationId: updateProducer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Producer'
+      responses:
+        '200':
+          description: OK
+  /producer/{id}:
+    get:
+      tags:
+        - producer
+      operationId: findProducer
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producer'
+    delete:
+      tags:
+        - producer
+      operationId: deleteProducers
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /producers:
+    get:
+      tags:
+        - producer
+      operationId: findProducers
+      parameters:
+        - in: query
+          name: birthCountry
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producer'
+  /release:
+    post:
+      tags:
+        - release
+      operationId: createRelease
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - release
+      operationId: updateRelease
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+      responses:
+        '200':
+          description: OK
+  /release/{id}:
+    get:
+      tags:
+        - release
+      operationId: findRelease
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+    delete:
+      tags:
+        - release
+      operationId: deleteRelease
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /releases:
+    get:
+      tags:
+        - release
+      operationId: findReleases
+      parameters:
+        - in: query
+          name: year
+          schema:
+            type: string
+            pattern: '^\d{4}$'
+        - in: query
+          name: artist
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: genre
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: language
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: producer
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: status[]
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+              minimum: 1
+        - in: query
+          name: type[]
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+              minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Release'
+  /release-status:
+    post:
+      tags:
+        - release
+      operationId: createReleaseStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseStatus'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - release
+      operationId: updateReleaseStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseStatus'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - release
+      operationId: findReleaseStatuses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReleaseStatus'
+  /release-status/{id}:
+    delete:
+      tags:
+        - release
+      operationId: deleteReleaseStatus
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /release-type:
+    post:
+      tags:
+        - release
+      operationId: createReleaseType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseType'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - release
+      operationId: updateReleaseType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseType'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - release
+      operationId: findReleaseTypes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReleaseType'
+  /release-type/{id}:
+    delete:
+      tags:
+        - release
+      operationId: deleteReleaseType
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /status:
+    post:
+      tags:
+        - status
+      operationId: createStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Status'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - status
+      operationId: updateStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Status'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - status
+      operationId: findStatuses
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+  /status/{id}:
+    delete:
+      tags:
+        - status
+      operationId: deleteStatus
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /track:
+    post:
+      tags:
+        - track
+      operationId: createTrack
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Track'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - track
+      operationId: updateTrack
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Track'
+      responses:
+        '200':
+          description: OK
+  /track/{id}:
+    get:
+      tags:
+        - track
+      operationId: findTrack
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Track'
+    delete:
+      tags:
+        - track
+      operationId: deleteTrack
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+  /tracks:
+    get:
+      tags:
+        - track
+      operationId: findTracks
+      parameters:
+        - in: query
+          name: artist
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - in: query
+          name: genre[]
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+              minimum: 1
+        - in: query
+          name: trackType[]
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+              minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Track'
+  /track-type:
+    post:
+      tags:
+        - track
+      operationId: createTrackType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackType'
+      responses:
+        '201':
+          description: Created
+    put:
+      tags:
+        - track
+      operationId: updateTrackType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackType'
+      responses:
+        '200':
+          description: OK
+    get:
+      tags:
+        - track
+      operationId: findTrackTypes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrackType'
+  /track-type/{id}:
+    delete:
+      tags:
+        - track
+      operationId: deleteTrackType
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Artist:
+      required:
+        - artist_id
+        - name
+        - formation_country
+        - genres
+        - favourite
+        - artist_type
+      properties:
+        artist_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+        formation_date:
+          type: string
+          pattern: '^\d{2}\/\d{2}\/\d{4}$'
+        formation_area:
+          type: string
+          maximum: 256
+        formation_country:
+          $ref: '#/components/schemas/Country'
+        disband_date:
+          type: string
+          pattern: '^\d{2}\/\d{2}\/\d{4}$'
+        disband_area:
+          type: string
+          maximum: 256
+        disband_country:
+          $ref: '#/components/schemas/Country'
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+        favourite:
+          type: boolean
+          default: false
+        artist_type:
+          $ref: '#/components/schemas/ArtistType'
+        isni:
+          type: string
+          pattern: '^\d{4} \d{4} \d{4} \d{4}$'
+        ipi:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ipi'
+        amazon_music_id:
+          type: string
+        wikidata_id:
+          type: string
+    ArtistType:
+      required:
+        - artist_type_id
+        - name
+      properties:
+        artist_type_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+    CatalogueItem:
+      required:
+        - global_id
+        - label_id
+        - catalogue_id
+      properties:
+        global_id:
+          type: integer
+          format: int32
+          minimum: 1
+        label_id:
+          type: integer
+          format: int32
+          minimum: 1
+        release_id:
+          type: integer
+          format: int32
+          minimum: 1
+        catalogue_id:
+          type: string
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+        release_status:
+          $ref: '#/components/schemas/ReleaseStatus'
+    Country:
+      required:
+        - country_id
+        - name
+      properties:
+        country_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+        wikidata_id:
+          type: string
+    Genre:
+      required:
+        - genre_id
+        - name
+        - origin_year
+        - favourite
+      properties:
+        genre_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+        origin_year:
+          type: integer
+        favourite:
+          type: boolean
+          default: false
+        parent_genre:
+          $ref: '#/components/schemas/Genre'
+        wikidata_id:
+          type: string
+    Ipi:
+      required:
+        - ipi_id
+        - reference
+      properties:
+        ipi_id:
+          type: string
+          pattern: '^\d{11}$'
+        reference:
+          type: string
+    Isrc:
+      required:
+        - isrc_id
+      properties:
+        isrc_id:
+          type: string
+          maximum: 15
+    Iswc:
+      required:
+        - iswc_id
+      properties:
+        isrc_id:
+          type: string
+          maximum: 15
+    Label:
+      required:
+        - label_id
+        - name
+        - formation_country
+        - favourite
+      properties:
+        label_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+        formation_date:
+          type: string
+          pattern: '^\d{2}\/\d{2}\/\d{4}$'
+        formation_area:
+          type: string
+          maximum: 256
+        formation_country:
+          $ref: '#/components/schemas/Country'
+        closing_date:
+          type: string
+          pattern: '^\d{2}\/\d{2}\/\d{4}$'
+        favourite:
+          type: boolean
+          default: false
+        label_code:
+          type: string
+          pattern: '^LC-\d{5}$'
+        ipi:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ipi'
+        wikidata_id:
+          type: string
+    Language:
+      required:
+        - language_id
+        - name
+        - charset
+      properties:
+        language_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+        charset:
+          type: string
+        wikidata_id:
+          type: string
+    Media:
+      required:
+        - media_id
+        - name
+        - media_type
+      properties:
+        media_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+        media_type:
+          type: string
+        wikidata_id:
+          type: string
+    Producer:
+      required:
+        - producer_id
+        - name
+        - birth_country
+        - favourite
+      properties:
+        producer_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+        birth_date:
+          type: string
+          pattern: '^\d{2}\/\d{2}\/\d{4}$'
+        birth_area:
+          type: string
+          maximum: 256
+        birth_country:
+          $ref: '#/components/schemas/Country'
+        death_date:
+          type: string
+          pattern: '^\d{2}\/\d{2}\/\d{4}$'
+        death_area:
+          type: string
+          maximum: 256
+        death_country:
+          $ref: '#/components/schemas/Country'
+        favourite:
+          type: boolean
+          default: false
+        isni:
+          type: string
+          maximum: 19
+        ipi:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ipi'
+        wikidata_id:
+          type: string
+    Release:
+      required:
+        - release_id
+        - title
+        - release_date
+        - artists
+        - genres
+        - languages
+        - release_types
+        - total_tracks
+        - missing_tracks
+        - total_discs
+        - missing_discs
+        - favourite
+        - art_quality
+        - tag_quality
+        - bitrate
+        - release_status
+        - status
+      properties:
+        release_id:
+          type: integer
+          format: int32
+          minimum: 1
+        title:
+          type: string
+        release_date:
+          type: string
+          pattern: '^\d{2}\/\d{2}\/\d{4}$'
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/Artist'
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Language'
+        producers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Producer'
+        release_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReleaseType'
+        total_tracks:
+          type: integer
+          format: int32
+          default: 0
+        missing_tracks:
+          type: integer
+          format: int32
+          default: 0
+        total_discs:
+          type: integer
+          format: int32
+          default: 0
+        missing_discs:
+          type: integer
+          format: int32
+          default: 0
+        favourite:
+          type: boolean
+          default: false
+        rym_rating:
+          type: integer
+          format: float
+          minimum: 0.00
+          maximum: 5.00
+          default: 0.00
+        aoty_rank:
+          type: integer
+          minimum: 1
+        bea_rank:
+          type: integer
+        christgau_rating:
+          type: string
+        hull_rating:
+          type: string
+        scaruffi_rating:
+          type: integer
+          format: float
+          minimum: 0.00
+          maximum: 10.00
+        metacritic:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 100
+        pitchfork_rating:
+          type: integer
+          format: float
+          minimum: 0.00
+          maximum: 10.00
+        art_quality:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 5
+          default: 0
+        tag_quality:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 5
+          default: 0
+        bitrate:
+          type: string
+          pattern: '^\d{3} \((?:A|C|V)BR\)$'
+          default: 320 (CBR)
+        asin:
+          type: string
+          minimum: 10
+          maximum: 10
+        wikidata_id:
+          type: string
+        release_status:
+          $ref: '#/components/schemas/ReleaseStatus'
+        status:
+          $ref: '#/components/schemas/Status'
+        description:
+          type: string
+    ReleaseStatus:
+      required:
+        - release_status_id
+        - name
+      properties:
+        release_status_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+    ReleaseType:
+      required:
+        - release_type_id
+        - name
+      properties:
+        release_type_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+    Status:
+      required:
+        - status_id
+        - name
+        - colour
+      properties:
+        status_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+        colour:
+          type: string
+          pattern: '^#[\dA-Fa-f]{6}$'
+    Track:
+      required:
+        - track_id
+        - title
+        - track_type
+        - artist
+        - favourite
+      properties:
+        track_id:
+          type: integer
+          format: int32
+          minimum: 1
+        title:
+          type: string
+        track_type:
+          $ref: '#/components/schemas/TrackType'
+        artist:
+          $ref: '#/components/schemas/Artist'
+        original_artist:
+          $ref: '#/components/schemas/Artist'
+        favourite:
+          type: boolean
+        isrc:
+          type: array
+          items:
+            $ref: '#/components/schemas/Isrc'
+        iswc:
+          type: array
+          items:
+            $ref: '#/components/schemas/Iswc'
+    TrackType:
+      required:
+        - track_type_id
+        - name
+      properties:
+        track_type_id:
+          type: integer
+          format: int32
+          minimum: 1
+        name:
+          type: string
+
+security:
+  - BasicAuth: []
