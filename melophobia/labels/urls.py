@@ -1,8 +1,14 @@
+from . import views
 from django.urls import path, include
-from rest_framework.routers import SimpleRouter
+from rest_framework_nested.routers import NestedSimpleRouter, SimpleRouter
 
 router = SimpleRouter()
+router.register(r'labels', views.LabelViewSet, basename="labels")
+
+catalogue_router = NestedSimpleRouter(router, r'labels', lookup='label')
+catalogue_router.register(r'catalogue', views.CatalogueItemsViewSet, basename='catalogue')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('', include(catalogue_router.urls)),
 ]

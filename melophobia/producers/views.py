@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from melophobia.producers.serializers import ProducerSerializer
+from melophobia.models import Producer
 
-# Create your views here.
+
+class ProducerViewSet(viewsets.ModelViewSet):
+    queryset = Producer.objects.all()
+    serializer_class = ProducerSerializer

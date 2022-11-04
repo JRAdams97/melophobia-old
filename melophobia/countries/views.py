@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from melophobia.models import Country
+from rest_framework import viewsets
+from melophobia.countries.serializers import CountrySerializer
 
-# Create your views here.
+
+class CountryViewSet(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer

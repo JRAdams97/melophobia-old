@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from melophobia.languages.serializers import LanguageSerializer
+from melophobia.models import Language
 
-# Create your views here.
+
+class LanguageViewSet(viewsets.ModelViewSet):
+    queryset = Language.objects.all()
+    serializer_class = LanguageSerializer

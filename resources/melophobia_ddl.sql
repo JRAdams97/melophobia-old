@@ -71,10 +71,11 @@ CREATE TABLE melophobia.catalogue_media (
 
 -- COUNTRY -------------------------------------------------------------------------------------------------------------
 CREATE TABLE melophobia.country (
-           id serial NOT NULL,
-         name text   UNIQUE NOT NULL,
-  wikidata_id text   UNIQUE,
-   CONSTRAINT country_pk PRIMARY KEY (id)
+            id serial  NOT NULL,
+          name text    UNIQUE NOT NULL,
+  country_code char(2) UNIQUE,
+   wikidata_id text    UNIQUE,
+    CONSTRAINT country_pk PRIMARY KEY (id)
 );
 
 -- GENRE ---------------------------------------------------------------------------------------------------------------
@@ -83,9 +84,15 @@ CREATE TABLE melophobia.genre (
           name text     UNIQUE NOT NULL,
    origin_year smallint NOT NULL,
      favourite boolean  DEFAULT FALSE NOT NULL,
-  parent_genre int,
    wikidata_id text     UNIQUE,
     CONSTRAINT genre_pk PRIMARY KEY (id)
+);
+
+-- GENRE_HIERARCHY -----------------------------------------------------------------------------------------------------
+CREATE TABLE melophobia.genre_hierarchy (
+         genre_id int NOT NULL,
+  parent_genre_id int NOT NULL,
+       CONSTRAINT genre_hierarchy_pk PRIMARY KEY (genre_id, parent_genre_id)
 );
 
 -- IPI -----------------------------------------------------------------------------------------------------------------
@@ -256,16 +263,16 @@ CREATE TABLE melophobia.track (
 
 -- TRACK_ISRC ----------------------------------------------------------------------------------------------------------
 CREATE TABLE melophobia.track_isrc (
-    track_id int      NOT NULL,
         isrc char(15) UNIQUE NOT NULL,
-  CONSTRAINT track_isrc_pk PRIMARY KEY (track_id, isrc)
+    track_id int,
+  CONSTRAINT track_isrc_pk PRIMARY KEY (isrc)
 );
 
 -- TRACK_ISWC ----------------------------------------------------------------------------------------------------------
 CREATE TABLE melophobia.track_iswc (
-    track_id int      NOT NULL,
         iswc char(15) UNIQUE NOT NULL,
-  CONSTRAINT track_iswc_pk PRIMARY KEY (track_id, iswc)
+    track_id int,
+  CONSTRAINT track_iswc_pk PRIMARY KEY (iswc)
 );
 
 -- TRACK_TYPE ----------------------------------------------------------------------------------------------------------
@@ -286,6 +293,7 @@ ALTER TABLE melophobia.catalogue_items OWNER TO postgres;
 ALTER TABLE melophobia.catalogue_media OWNER TO postgres;
 ALTER TABLE melophobia.country OWNER TO postgres;
 ALTER TABLE melophobia.genre OWNER TO postgres;
+ALTER TABLE melophobia.genre_hierarchy OWNER TO postgres;
 ALTER TABLE melophobia.ipi OWNER TO postgres;
 ALTER TABLE melophobia.label OWNER TO postgres;
 ALTER TABLE melophobia.label_ipis OWNER TO postgres;
@@ -358,9 +366,13 @@ ALTER TABLE ONLY melophobia.catalogue_media
   ADD CONSTRAINT media_fk
      FOREIGN KEY (media_id) REFERENCES melophobia.media(id);
 
-ALTER TABLE ONLY melophobia.genre
-  ADD CONSTRAINT genre_fk
-     FOREIGN KEY (parent_genre) REFERENCES melophobia.genre(id);
+ALTER TABLE ONLY melophobia.genre_hierarchy
+  ADD CONSTRAINT m_genre_fk
+     FOREIGN KEY (genre_id) REFERENCES melophobia.genre(id);
+
+ALTER TABLE ONLY melophobia.genre_hierarchy
+  ADD CONSTRAINT p_genre_fk
+     FOREIGN KEY (parent_genre_id) REFERENCES melophobia.genre(id);
 
 ALTER TABLE ONLY melophobia.label
   ADD CONSTRAINT formation_country_fk

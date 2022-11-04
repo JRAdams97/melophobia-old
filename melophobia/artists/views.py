@@ -1,6 +1,6 @@
-from melophobia.models import Artist, ArtistType
+from melophobia.models import Artist, ArtistType, Ipi
 from rest_framework import viewsets
-from melophobia.artists.serializers import ArtistSerializer, ArtistTypeSerializer
+from melophobia.artists.serializers import ArtistSerializer, ArtistTypeSerializer, IpiSerializer
 
 
 class ArtistViewSet(viewsets.ModelViewSet):
@@ -11,3 +11,8 @@ class ArtistViewSet(viewsets.ModelViewSet):
 class ArtistTypeViewSet(viewsets.ModelViewSet):
     queryset = ArtistType.objects.all()
     serializer_class = ArtistTypeSerializer
+
+
+class IpiViewSet(viewsets.ModelViewSet):
+    queryset = Ipi.objects.all()
+    serializer_class = IpiSerializer
