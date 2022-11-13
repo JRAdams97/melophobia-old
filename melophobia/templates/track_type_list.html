@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Track Types</title>
+</head>
+<body>
+{% block content %}
+<main class="content">
+  <div class="container-fluid p-0">
+    <h1 class="h3 mb-3">Track Types</h1>
+    <div class="row">
+      <div class="col-12 col-xl-12">
+        <div class="card">
+          <table class="table table-striped" id="trackTypesTable">
+            <thead>
+            <tr>
+              <th style="width:95%;">Name</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for track_type in track_types|dictsort:"name" %}
+            <tr>
+              <td>{{ track_type.name }}</td>
+              <td class="table-action">
+                <a href="#"><i class="align-middle text-info" data-feather="edit-2"></i></a>
+                <a href="#"><i class="align-middle text-danger" data-feather="trash"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+{% block datatable %}
+<script>
+    $('#trackTypesTable').DataTable({
+        "drawCallback": function(settings) {
+            feather.replace();
+        }
+    });
+
+</script>
+{% endblock datatable %}
+</body>
+</html>

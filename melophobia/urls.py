@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.urls import include, path
 from rest_framework import routers
 
@@ -21,14 +22,14 @@ router = routers.SimpleRouter()
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('artists-app/', include('melophobia.artists.urls')),
-    path('countries-app/', include('melophobia.countries.urls')),
-    path('genres-app/', include('melophobia.genres.urls')),
-    path('labels-app/', include('melophobia.labels.urls')),
-    path('languages-app/', include('melophobia.languages.urls')),
-    path('media-app/', include('melophobia.media.urls')),
-    path('producers-app/', include('melophobia.producers.urls')),
-    path('releases-app/', include('melophobia.releases.urls')),
-    path('statuses-app/', include('melophobia.statuses.urls')),
-    path('tracks-app/', include('melophobia.tracks.urls')),
+    path('artists-app/', include(('melophobia.artists.urls', 'artists'), namespace='artists')),
+    path('countries-app/', include(('melophobia.countries.urls', 'countries'), namespace='countries')),
+    path('genres-app/', include(('melophobia.genres.urls', 'genres'), namespace='genres')),
+    path('labels-app/', include(('melophobia.labels.urls', 'labels'), namespace='labels')),
+    path('languages-app/', include(('melophobia.languages.urls', 'languages'), namespace='languages')),
+    path('media-app/', include(('melophobia.media.urls', 'media'), namespace='media')),
+    path('producers-app/', include(('melophobia.producers.urls', 'producers'), namespace='producers')),
+    path('releases-app/', include(('melophobia.releases.urls', 'releases'), namespace='releases')),
+    path('statuses-app/', include(('melophobia.statuses.urls', 'statuses'), namespace='statuses')),
+    path('tracks-app/', include(('melophobia.tracks.urls', 'tracks'), namespace='tracks')),
 ]

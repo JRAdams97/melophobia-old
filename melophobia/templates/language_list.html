@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Languages</title>
+</head>
+<body>
+{% block content %}
+<main class="content">
+  <div class="container-fluid p-0">
+    <h1 class="h3 mb-3">Languages</h1>
+    <div class="row">
+      <div class="col-12 col-xl-12">
+        <div class="card">
+          <table class="table table-striped" id="languagesTable">
+            <thead>
+            <tr>
+              <th style="width:55%;">Name</th>
+              <th style="width:40%">Charset</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for language in languages|dictsort:"name" %}
+            <tr>
+              <td>{{ language.name }}</td>
+              <td>{{ language.charset }}</td>
+              <td class="table-action">
+                <a href="#"><i class="align-middle text-info" data-feather="edit-2"></i></a>
+                <a href="#"><i class="align-middle text-danger" data-feather="trash"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+{% block datatable %}
+<script>
+    $('#languagesTable').DataTable({
+        "drawCallback": function(settings) {
+            feather.replace();
+        }
+    });
+
+</script>
+{% endblock datatable %}
+</body>
+</html>
