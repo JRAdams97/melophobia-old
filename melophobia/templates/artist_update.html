@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load rest_framework %}
+<html>
+<body>
+{% block content %}
+<main class="content">
+  <div class="container-fluid p-0">
+    <h1 class="h3 mb-3">Create Artist</h1>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <form action="{% url 'artists:artist-update-view' pk %}" method="post">
+              {% csrf_token %}
+              {% render_form serializer template_pack='melophobia_template_pack/' %}
+              <div class="mb-3 row">
+                <div class="col-sm-9 ms-sm-auto">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+</body>
+</html>

@@ -1,0 +1,19 @@
+<div class="mb-5 me-3 row">
+  {% if field.label %}
+  <label class="col-form-label col-sm-3 text-sm-end pt-sm-0">{{ field.label }}</label>
+  {% endif %}
+
+  <div class="col-sm-9">
+    <input type="checkbox" class="form-check-input" name="{{ field.name }}" value="true" {% if field.value %}checked{% endif %}>
+  </div>
+
+  {% if field.errors %}
+    {% for error in field.errors %}
+      <span class="help-block">{{ error }}</span>
+    {% endfor %}
+  {% endif %}
+
+  {% if field.help_text %}
+    <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+  {% endif %}
+</div>

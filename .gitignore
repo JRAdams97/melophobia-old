@@ -1,3 +1,6 @@
+# Media directory for artist and release images as well as record label logos
+media/
+
 tmp/
 
 # PyCharm

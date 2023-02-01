@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path
 from rest_framework import routers
 
@@ -33,3 +34,6 @@ urlpatterns = [
     path('statuses-app/', include(('melophobia.statuses.urls', 'statuses'), namespace='statuses')),
     path('tracks-app/', include(('melophobia.tracks.urls', 'tracks'), namespace='tracks')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

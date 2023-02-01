@@ -1,9 +1,9 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link rel="shortcut icon" href="{% static 'img/icons/icon-48x48.png'"/>
@@ -31,7 +31,7 @@
           </a>
           <ul id="artists" class="sidebar-dropdown list-unstyled collapse " data-bs-parent="#sidebar">
             <li class="sidebar-item"><a class="sidebar-link" href="{% url 'artists:artists-view' %}">View All</a></li>
-            <li class="sidebar-item"><a class="sidebar-link" href="#">Create</a></li>
+            <li class="sidebar-item"><a class="sidebar-link" href="{% url 'artists:artist-create-view' %}">Create</a></li>
             <li class="sidebar-item"><a class="sidebar-link" href="{% url 'artists:artist-types-view' %}">Types</a></li>
           </ul>
         </li>

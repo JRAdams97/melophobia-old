@@ -5,7 +5,16 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from django.core.validators import RegexValidator
 from django.db import models
+
+# Validation regexes
+DATE_REGEX = '^(?:0\\d|1\\d|2\\d|3[0-1])\\/(?:0\\d|1[0-2])\\/\\d{4}$'
+ISNI_REGEX = '^(?:\\d{4} ){3}\\d{4}$'
+
+# Validation messages
+DATE_V_MSG = "Dates must be in 'dd/MM/yyyy' format."
+ISNI_V_MSG = "ISNIs must be in the format 'xxxx xxxx xxxx xxxx'."
 
 
 class ArtistType(models.Model):
@@ -52,13 +61,13 @@ class Genre(models.Model):
 
 
 class GenreHierarchy(models.Model):
-    genre = models.OneToOneField(Genre, models.DO_NOTHING, primary_key=True, related_name="mainGenre")
-    parent_genre = models.ForeignKey(Genre, models.DO_NOTHING, related_name="parentGenre")
+    genre = models.OneToOneField(Genre, models.CASCADE, primary_key=True, related_name="mainGenre")
+    parent_genre = models.ForeignKey(Genre, models.CASCADE, related_name="parentGenre")
 
     class Meta:
         app_label = 'genres'
         managed = False
-        db_table = 'genre_hierarchy'
+        db_table = 'genrea_hierarchy'
         unique_together = (('genre', 'parent_genre'),)
 
 
@@ -66,6 +75,8 @@ class Ipi(models.Model):
     ipi_id = models.TextField(primary_key=True)
 
     class Meta:
+        verbose_name = 'IPI'
+        verbose_name_plural = 'IPIs'
         app_label = 'artists'
         managed = False
         db_table = 'ipi'
@@ -73,21 +84,27 @@ class Ipi(models.Model):
 
 class Artist(models.Model):
     name = models.TextField()
-    formation_date = models.CharField(max_length=10, blank=True, null=True)
-    formation_area = models.TextField(blank=True, null=True)
-    formation_country = models.ForeignKey(Country, models.DO_NOTHING, related_name='formationCountry')
-    disband_date = models.CharField(max_length=10, blank=True, null=True)
-    disband_area = models.TextField(blank=True, null=True)
+    formation_date = models.CharField(max_length=10, blank=True, null=True, verbose_name='Formation Date',
+                                      validators=[RegexValidator(regex=DATE_REGEX, message=DATE_V_MSG)])
+    formation_area = models.TextField(blank=True, null=True, verbose_name='Formation Area')
+    formation_country = models.ForeignKey(Country, models.CASCADE, related_name='formationCountry',
+                                          verbose_name='Formation Country')
+    disband_date = models.CharField(max_length=10, blank=True, null=True, verbose_name='Disband Date',
+                                    validators=[RegexValidator(regex=DATE_REGEX, message=DATE_V_MSG)])
+    disband_area = models.TextField(blank=True, null=True, verbose_name='Disband Area')
     disband_country = models.ForeignKey(
-        Country, models.DO_NOTHING, blank=True, null=True, related_name='disbandCountry')
+        Country, models.CASCADE, blank=True, null=True, related_name='disbandCountry',
+        verbose_name='Disband Country')
     genres = models.ManyToManyField(Genre, related_name="artist", through='ArtistGenres',
                                     through_fields=('artist', 'genre'))
     favourite = models.BooleanField()
-    artist_type = models.ForeignKey(ArtistType, models.DO_NOTHING)
-    isni = models.CharField(unique=True, max_length=19, blank=True, null=True)
-    amazon_music_id = models.TextField(unique=True, blank=True, null=True)
-    ipis = models.ManyToManyField(Ipi, related_name="artist", through='ArtistIpis', through_fields=('artist', 'ipi'))
-    wikidata_id = models.TextField(unique=True, blank=True, null=True)
+    artist_type = models.ForeignKey(ArtistType, models.CASCADE, verbose_name='Artist Type')
+    isni = models.CharField(unique=True, max_length=19, blank=True, null=True, verbose_name='ISNI',
+                            validators=[RegexValidator(regex=ISNI_REGEX, message=ISNI_V_MSG)])
+    amazon_music_id = models.TextField(unique=True, blank=True, null=True, verbose_name='Amazon Music ID')
+    ipis = models.ManyToManyField(Ipi, related_name="artist", through='ArtistIpis', through_fields=('artist', 'ipi'),
+                                  verbose_name="IPIs")
+    wikidata_id = models.TextField(unique=True, blank=True, null=True, verbose_name='Wikidata ID')
 
     class Meta:
         app_label = 'artists'
@@ -99,8 +116,8 @@ class Artist(models.Model):
 
 
 class ArtistGenres(models.Model):
-    artist = models.OneToOneField(Artist, models.DO_NOTHING, primary_key=True)
-    genre = models.ForeignKey(Genre, models.DO_NOTHING)
+    artist = models.OneToOneField(Artist, models.CASCADE, primary_key=True)
+    genre = models.ForeignKey(Genre, models.CASCADE)
 
     class Meta:
         app_label = 'artists'
@@ -113,8 +130,8 @@ class ArtistGenres(models.Model):
 
 
 class ArtistIpis(models.Model):
-    artist = models.OneToOneField(Artist, models.DO_NOTHING, primary_key=True)
-    ipi = models.OneToOneField(Ipi, models.DO_NOTHING)
+    artist = models.OneToOneField(Artist, models.CASCADE, primary_key=True)
+    ipi = models.OneToOneField(Ipi, models.CASCADE)
 
     class Meta:
         app_label = 'artists'
@@ -127,7 +144,7 @@ class Label(models.Model):
     name = models.TextField()
     formation_date = models.CharField(max_length=10, blank=True, null=True)
     formation_area = models.TextField(blank=True, null=True)
-    formation_country = models.ForeignKey(Country, models.DO_NOTHING)
+    formation_country = models.ForeignKey(Country, models.CASCADE)
     closing_date = models.CharField(max_length=10, blank=True, null=True)
     favourite = models.BooleanField()
     label_code = models.TextField(unique=True, blank=True, null=True)
@@ -198,10 +215,10 @@ class Producer(models.Model):
     name = models.TextField()
     birth_date = models.CharField(max_length=10, blank=True, null=True)
     birth_area = models.TextField(blank=True, null=True)
-    birth_country = models.ForeignKey(Country, models.DO_NOTHING, related_name='birthCountry')
+    birth_country = models.ForeignKey(Country, models.CASCADE, related_name='birthCountry')
     death_date = models.CharField(max_length=10, blank=True, null=True)
     death_area = models.TextField(blank=True, null=True)
-    death_country = models.ForeignKey(Country, models.DO_NOTHING, blank=True, null=True, related_name='deathCountry')
+    death_country = models.ForeignKey(Country, models.CASCADE, blank=True, null=True, related_name='deathCountry')
     favourite = models.BooleanField()
     isni = models.CharField(unique=True, max_length=19, blank=True, null=True)
     wikidata_id = models.TextField(unique=True, blank=True, null=True)
@@ -243,8 +260,8 @@ class Release(models.Model):
                                        through_fields=('release', 'producer'))
     asin = models.CharField(unique=True, max_length=10, blank=True, null=True)
     wikidata_id = models.TextField(unique=True, blank=True, null=True)
-    release_status = models.ForeignKey(ReleaseStatus, models.DO_NOTHING)
-    log_status = models.ForeignKey(Status, models.DO_NOTHING)
+    release_status = models.ForeignKey(ReleaseStatus, models.CASCADE)
+    log_status = models.ForeignKey(Status, models.CASCADE)
     description = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -268,12 +285,12 @@ class Media(models.Model):
 
 
 class CatalogueItems(models.Model):
-    label = models.ForeignKey(Label, models.DO_NOTHING)
-    release = models.ForeignKey(Release, models.DO_NOTHING, blank=True, null=True)
+    label = models.ForeignKey(Label, models.CASCADE)
+    release = models.ForeignKey(Release, models.CASCADE, blank=True, null=True)
     catalogue_id = models.TextField()
     media = models.ManyToManyField(Media, related_name="catalogue", through='CatalogueMedia',
                                    through_fields=('global_catalogue', 'media'))
-    release_status = models.ForeignKey(ReleaseStatus, models.DO_NOTHING)
+    release_status = models.ForeignKey(ReleaseStatus, models.CASCADE)
 
     class Meta:
         app_label = 'labels'
@@ -282,8 +299,8 @@ class CatalogueItems(models.Model):
 
 
 class CatalogueMedia(models.Model):
-    global_catalogue = models.OneToOneField(CatalogueItems, models.DO_NOTHING, primary_key=True)
-    media = models.ForeignKey(Media, models.DO_NOTHING)
+    global_catalogue = models.OneToOneField(CatalogueItems, models.CASCADE, primary_key=True)
+    media = models.ForeignKey(Media, models.CASCADE)
 
     class Meta:
         app_label = 'labels'
@@ -293,8 +310,8 @@ class CatalogueMedia(models.Model):
 
 
 class LabelIpis(models.Model):
-    label = models.OneToOneField(Label, models.DO_NOTHING, primary_key=True)
-    ipi = models.OneToOneField(Ipi, models.DO_NOTHING)
+    label = models.OneToOneField(Label, models.CASCADE, primary_key=True)
+    ipi = models.OneToOneField(Ipi, models.CASCADE)
 
     class Meta:
         app_label = 'labels'
@@ -307,8 +324,8 @@ class LabelIpis(models.Model):
 
 
 class ProducerIpis(models.Model):
-    producer = models.OneToOneField(Producer, models.DO_NOTHING, primary_key=True)
-    ipi = models.OneToOneField(Ipi, models.DO_NOTHING)
+    producer = models.OneToOneField(Producer, models.CASCADE, primary_key=True)
+    ipi = models.OneToOneField(Ipi, models.CASCADE)
 
     class Meta:
         app_label = 'producers'
@@ -318,8 +335,8 @@ class ProducerIpis(models.Model):
 
 
 class ReleaseArtists(models.Model):
-    release = models.OneToOneField(Release, models.DO_NOTHING, primary_key=True)
-    artist = models.ForeignKey(Artist, models.DO_NOTHING)
+    release = models.OneToOneField(Release, models.CASCADE, primary_key=True)
+    artist = models.ForeignKey(Artist, models.CASCADE)
 
     class Meta:
         app_label = 'releases'
@@ -329,8 +346,8 @@ class ReleaseArtists(models.Model):
 
 
 class ReleaseGenres(models.Model):
-    release = models.OneToOneField(Release, models.DO_NOTHING, primary_key=True)
-    genre = models.ForeignKey(Genre, models.DO_NOTHING)
+    release = models.OneToOneField(Release, models.CASCADE, primary_key=True)
+    genre = models.ForeignKey(Genre, models.CASCADE)
 
     class Meta:
         app_label = 'releases'
@@ -340,8 +357,8 @@ class ReleaseGenres(models.Model):
 
 
 class ReleaseLanguages(models.Model):
-    release = models.OneToOneField(Release, models.DO_NOTHING, primary_key=True)
-    language = models.ForeignKey(Language, models.DO_NOTHING)
+    release = models.OneToOneField(Release, models.CASCADE, primary_key=True)
+    language = models.ForeignKey(Language, models.CASCADE)
 
     class Meta:
         app_label = 'releases'
@@ -351,8 +368,8 @@ class ReleaseLanguages(models.Model):
 
 
 class ReleaseProducers(models.Model):
-    release = models.OneToOneField(Release, models.DO_NOTHING, primary_key=True)
-    producer = models.ForeignKey(Producer, models.DO_NOTHING)
+    release = models.OneToOneField(Release, models.CASCADE, primary_key=True)
+    producer = models.ForeignKey(Producer, models.CASCADE)
 
     class Meta:
         app_label = 'releases'
@@ -362,8 +379,8 @@ class ReleaseProducers(models.Model):
 
 
 class ReleaseTypes(models.Model):
-    release = models.OneToOneField(Release, models.DO_NOTHING, primary_key=True)
-    release_type = models.ForeignKey(ReleaseType, models.DO_NOTHING)
+    release = models.OneToOneField(Release, models.CASCADE, primary_key=True)
+    release_type = models.ForeignKey(ReleaseType, models.CASCADE)
 
     class Meta:
         app_label = 'releases'
@@ -386,10 +403,10 @@ class TrackType(models.Model):
 
 class Track(models.Model):
     title = models.TextField()
-    track_type = models.ForeignKey(TrackType, models.DO_NOTHING)
-    artist = models.ForeignKey(Artist, models.DO_NOTHING, related_name='artist')
+    track_type = models.ForeignKey(TrackType, models.CASCADE)
+    artist = models.ForeignKey(Artist, models.CASCADE, related_name='artist')
     original_artist = models.ForeignKey(
-        Artist, models.DO_NOTHING, blank=True, null=True, related_name='originalArtist')
+        Artist, models.CASCADE, blank=True, null=True, related_name='originalArtist')
     favourite = models.BooleanField()
     wikidata_id = models.TextField(unique=True, blank=True, null=True)
 
@@ -404,7 +421,7 @@ class Track(models.Model):
 
 class TrackIsrc(models.Model):
     isrc = models.CharField(primary_key=True, max_length=15)
-    track = models.ForeignKey(Track, models.DO_NOTHING, blank=True, null=True)
+    track = models.ForeignKey(Track, models.CASCADE, blank=True, null=True)
 
     class Meta:
         app_label = 'tracks'
@@ -414,7 +431,7 @@ class TrackIsrc(models.Model):
 
 class TrackIswc(models.Model):
     iswc = models.CharField(primary_key=True, max_length=15)
-    track = models.ForeignKey(Track, models.DO_NOTHING, blank=True, null=True)
+    track = models.ForeignKey(Track, models.CASCADE, blank=True, null=True)
 
     class Meta:
         app_label = 'tracks'

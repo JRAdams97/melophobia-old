@@ -1,0 +1,22 @@
+<div class="mb-5 me-3 row">
+  {% if field.label %}
+  <label class="col-form-label col-md-3 text-sm-end {% if field.errors %}text-danger{% endif %}">{{ field.label }}</label>
+  {% endif %}
+
+  <div class="col-md-9">
+    <input name="{{ field.name }}" {% if style.input_type != "file" %} class="form-control {% if field.errors %}is-invalid{% endif %}" {% endif %} type="{{ style.input_type }}" {% if field.value is not None %}value="{{ field.value }}" {% endif %} {% if style.autofocus and style.input_type != "hidden" %}autofocus{% endif %}>
+  </div>
+
+  {% if field.errors %}
+  {% for error in field.errors %}
+  <div class="col-sm-3"></div>
+  <div class="col-sm-9">
+    <small class="help-block form-text text-danger">{{ error }}</small>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  {% if field.help_text %}
+  <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+  {% endif %}
+</div>

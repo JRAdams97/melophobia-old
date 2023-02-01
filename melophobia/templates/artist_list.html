@@ -1,5 +1,5 @@
-{% extends "base.html" %}
 <!DOCTYPE html>
+{% extends "base.html" %}
 <html lang="en">
 <head>
   <title>Artists</title>
@@ -8,7 +8,10 @@
 {% block content %}
 <main class="content">
   <div class="container-fluid p-0">
-    <h1 class="h3 mb-3">Artists</h1>
+    <div class="mb-3 me-1 row">
+      <h1 class="h3 col-md-11">Artists</h1>
+      <a href="{% url 'artists:artist-create-view' %}" class="btn btn-primary col-md-1">Add</a>
+    </div>
     <div class="row">
       <div class="col-12 col-xl-12">
         <div class="card">
@@ -26,14 +29,17 @@
             <tbody>
             {% for artist in artists|dictsort:"name" %}
             <tr>
-              <td>{{ artist.name }}</td>
+              <td><a href="{% url 'artists:artist-detail-view' pk=artist.id %}">{{ artist.name }}</a></td>
               <td>{{ artist.genres.all|join:" / " }}</td>
               <td>{{ artist.artist_type }}</td>
               <td>{{ artist.favourite }}</td>
               <td>{{ artist.isni }}</td>
               <td class="table-action">
-                <a href="#"><i class="align-middle text-info" data-feather="edit-2"></i></a>
-                <a href="#"><i class="align-middle text-danger" data-feather="trash"></i></a>
+                <a href="{% url 'artists:artist-update-view' pk=artist.id %}"><i class="align-middle text-info"
+                                                                                 data-feather="edit-2"></i></a>
+                <a href="{% url 'artists:artist-delete-view' pk=artist.id %}"><i class="align-middle text-danger"
+                                                                                 data-feather="trash"></i></a>
+                </form>
               </td>
             </tr>
             {% endfor %}
@@ -52,7 +58,6 @@
             feather.replace();
         }
     });
-
 </script>
 {% endblock datatable %}
 </body>

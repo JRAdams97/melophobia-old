@@ -3,7 +3,7 @@ from melophobia.models import Artist, ArtistType, Genre, Ipi
 
 
 class ArtistSerializer(serializers.ModelSerializer):
-    genres = serializers.PrimaryKeyRelatedField(queryset=Genre.objects.all(), many=True)
+    genres = serializers.PrimaryKeyRelatedField(queryset=Genre.objects.all().order_by("name"), many=True)
     ipis = serializers.PrimaryKeyRelatedField(queryset=Ipi.objects.all(), many=True)
 
     class Meta:

@@ -1,0 +1,21 @@
+<div class="mb-5 me-3 row">
+  {% if field.label %}
+  <label class="col-form-label col-sm-3 text-sm-end {% if field.errors %}text-danger{% endif %}">{{ field.label }}</label>
+  {% endif %}
+
+  <div class="col-sm-9">
+    <textarea name="{{ field.name }}" class="form-control {% if field.errors %}is-invalid{% endif %}" rows="3">{% if field.value %}{{ field.value }}{% endif %}</textarea>
+  </div>
+  {% if field.errors %}
+  {% for error in field.errors %}
+  <div class="col-sm-3"></div>
+  <div class="col-sm-9">
+    <small class="help-block form-text text-danger">{{ error }}</small>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  {% if field.help_text %}
+  <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+  {% endif %}
+</div>

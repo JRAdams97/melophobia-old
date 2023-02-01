@@ -7,3 +7,7 @@
   padding-left: 2em;
   padding-right: 2em;
 }
+
+.mb-5.row {
+    margin-top: 2em;
+}
